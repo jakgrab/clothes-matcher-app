@@ -7,6 +7,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun File.toBase64(): String? {
     val result: String?
@@ -44,4 +46,9 @@ fun createTempFileFromUri(context: Context, uri: Uri, fileName: String): File? {
         e.printStackTrace()
         null
     }
+}
+
+fun getTempFileName(): String {
+    val dateFormat = SimpleDateFormat("dd-MM-yy-HH-mm", Locale.GERMAN)
+    return dateFormat.format(System.currentTimeMillis()) + ".jpg"
 }

@@ -19,7 +19,7 @@ import com.example.clothesmatcher.PhotoFileProvider
 import retrofit2.Response
 
 @Composable
-fun ImagePicker (viewModel: MainViewModel = hiltViewModel()) {
+fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
 
     var hasImage by remember {
         mutableStateOf(false)
@@ -57,6 +57,13 @@ fun ImagePicker (viewModel: MainViewModel = hiltViewModel()) {
 //    val responseState by remember {
 //        mutableStateOf<Response<Int>?>(null)
 //    }
+    val showPickSelectionButtons = remember {
+        mutableStateOf(true)
+    }
+
+    val imageString = remember {
+        mutableStateOf<String?>(null)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -67,8 +74,10 @@ fun ImagePicker (viewModel: MainViewModel = hiltViewModel()) {
                 modifier = Modifier.fillMaxWidth(),
                 contentDescription = "Selected Image"
             )
+            showPickSelectionButtons.value = false
+            imageString.value = viewModel.imageStringFromUri(context, imageUri)
 //            Log.d("PIC", "Image URI: $imageUri")
-            viewModel.postImage(context, imageUri)
+//            viewModel.postImage(context, imageUri)
 
         }
         Column(
@@ -77,28 +86,41 @@ fun ImagePicker (viewModel: MainViewModel = hiltViewModel()) {
                 .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
-                onClick = {
-                    imagePicker.launch("image/*")
+            if (showPickSelectionButtons.value) {
+                Button(
+                    onClick = {
+                        imagePicker.launch("image/*")
+                    }
+                ) {
+                    Text(text = "Select Image")
                 }
-            ) {
-                Text(text = "Select Image")
+
+                Button(
+                    modifier = Modifier.padding(top = 16.dp),
+                    onClick = {
+                        val uri = PhotoFileProvider.getImageUri(context)
+                        // TODO viewmodel after cameraLauncher
+                        // viewModel causes problems!!!!
+
+                        imageUri = uri
+                        cameraLauncher.launch(uri)
+                        //viewModel.postImage(uri)
+                    }
+                ) {
+                    Text(text = "Take Photo")
+                }
+            } else {
+                Button(
+                    onClick = {
+                        if (imageString.value != null)
+                            viewModel.postImage(imageString.value)
+                    }
+                ) {
+                    Text(text = "Send image")
+                }
+
             }
 
-            Button(
-                modifier = Modifier.padding(top = 16.dp),
-                onClick = {
-                    val uri = PhotoFileProvider.getImageUri(context)
-                    // TODO viewmodel after cameraLauncher
-                    // viewModel causes problems!!!!
-
-                    imageUri = uri
-                    cameraLauncher.launch(uri)
-                    //viewModel.postImage(uri)
-                }
-            ) {
-                Text(text = "Take Photo")
-            }
         }
     }
 }

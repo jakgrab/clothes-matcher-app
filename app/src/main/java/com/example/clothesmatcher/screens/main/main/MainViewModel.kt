@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.clothesmatcher.data.model.ApiResponse
 import com.example.clothesmatcher.domain.repository.FileRepository
 import com.example.clothesmatcher.utils.toBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,49 +13,72 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 import com.example.clothesmatcher.utils.createTempFileFromUri
+import com.example.clothesmatcher.utils.getTempFileName
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import retrofit2.Call
 import retrofit2.Response
 import java.text.SimpleDateFormat
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    @ApplicationContext context: Context,
     private val repository: FileRepository
 ) : ViewModel() {
 
-    val responseState = MutableStateFlow<Response<Int>?>(null)
+    //private val responseState = MutableStateFlow<Response<ApiResponse>?>(null)
 
 
-    fun postImage(context: Context, uri: Uri?): Boolean {
+    fun postImage(imageString: String?) {
 
-        if (uri == null) {
-            Log.e("PIC", "URI is null")
-            return false
-        }
         // uri to image to string
         // doesn't work, works for files, not images!
         //val image = uri.path?.let { File(it) }
-        val tempFileName = SimpleDateFormat.getDateInstance().format(System.currentTimeMillis()) + ".jpg"
+//        SimpleDateFormat.getDateInstance(2, )
+//        val dateFormat = SimpleDateFormat()
+//        val tempFileName = SimpleDateFormat.getDateInstance().format(System.currentTimeMillis()) + ".jpg"
+        val jsonObject = JSONObject()
+        jsonObject.put("photo", imageString)
+        val jsonObjectToString = jsonObject.toString()
 
+        val requestBody = jsonObjectToString.toRequestBody("application/json".toMediaTypeOrNull())
 
-        try {
-            val file = createTempFileFromUri(context, uri, tempFileName)
-            Log.d("PIC", "Created file: ${file.toString()}")
-
-            val imageToString = file!!.toBase64()
-
-            viewModelScope.launch {
-                val response =  repository.uploadFile(photo = imageToString!!)
-                this@MainViewModel.responseState.value = response
-                Log.d("PIC", "Upload successful: ${this@MainViewModel.responseState.value.toString()}")
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.uploadFile(requestBody)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    Log.d("PIC", "Response: ${response.body()}")
+                } else {
+                    Log.e("PIC", "Retrofit error: ${response.code()}")
+                }
             }
-        } catch (e: IOException) {
-            Log.d("PIC", "Failed to convert, error: ${e.printStackTrace()}")
+//                //this@MainViewModel.responseState.value = response
+//                //Log.d("PIC","RESPONSE: ${response.body().toString()}")
+//                Log.d("PIC", "-------------------------------------")
+//                //Log.d("PIC","Upload successful: ${this@MainViewModel.responseState.value.toString()}")
+//                Log.d("PIC", "Upload successful: $response")
         }
-        return true
+    }
 
+    fun imageStringFromUri(context: Context, uri: Uri?): String? {
+        if (uri == null)
+            return null
 
+        val file = createTempFileFromUri(context, uri, getTempFileName())
+
+        Log.d("PIC", "Created file: ${file.toString()}")
+
+        val fileToString = file!!.toBase64()
+        file.delete()
+
+        return fileToString
     }
 
 }
