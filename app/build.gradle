@@ -88,4 +88,7 @@ dependencies {
 
     // Apache Commons FileUtils for converting uri to file
     implementation "commons-io:commons-io:2.7"
+
+    // Icons
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 }

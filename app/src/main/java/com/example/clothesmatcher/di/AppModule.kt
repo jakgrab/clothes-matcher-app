@@ -1,9 +1,9 @@
 package com.example.clothesmatcher.di
 
 import com.example.clothesmatcher.constants.Constants.BASE_URL
-import com.example.clothesmatcher.data.remote.FileApi
-import com.example.clothesmatcher.data.repository.FileRepositoryImpl
-import com.example.clothesmatcher.domain.repository.FileRepository
+import com.example.clothesmatcher.data.remote.ClothesApi
+import com.example.clothesmatcher.data.repository.ClothesRepositoryImpl
+import com.example.clothesmatcher.domain.repository.ClothesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,17 +18,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFileApi(): FileApi {
+    fun provideFileApi(): ClothesApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(FileApi::class.java)
+            .create(ClothesApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun providesFileRepository(api: FileApi): FileRepository {
-        return FileRepositoryImpl(api)
+    fun providesFileRepository(api: ClothesApi): ClothesRepository {
+        return ClothesRepositoryImpl(api)
     }
 }

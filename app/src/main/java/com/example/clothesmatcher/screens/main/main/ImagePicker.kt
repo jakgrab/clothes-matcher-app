@@ -19,7 +19,15 @@ import com.example.clothesmatcher.PhotoFileProvider
 import retrofit2.Response
 
 @Composable
-fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
+fun ImagePicker(
+    modifier: Modifier,
+    viewModel: MainViewModel = hiltViewModel(),
+    onSendImage: () -> Unit = {}
+) {
+    // TODO change send button to "done"?
+    // TODO move viewModel.postImage from ImagePicker to ImagePOster
+    // Todo add a button "send" in ImagePoster
+    // TODO Clean up!
 
     var hasImage by remember {
         mutableStateOf(false)
@@ -33,13 +41,6 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent(),
             onResult = { uri ->
-                // TODO viewModel caused problems
-//                if (uri != null) {
-//                    val file = uri.path?.let { File(it) }
-//                }
-
-                //viewModel.postImage(uri)
-
                 hasImage = uri != null
                 imageUri = uri
             }
@@ -54,9 +55,6 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
-//    val responseState by remember {
-//        mutableStateOf<Response<Int>?>(null)
-//    }
     val showPickSelectionButtons = remember {
         mutableStateOf(true)
     }
@@ -66,7 +64,7 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         if (hasImage && imageUri != null) {
             AsyncImage(
@@ -76,8 +74,6 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
             )
             showPickSelectionButtons.value = false
             imageString.value = viewModel.imageStringFromUri(context, imageUri)
-//            Log.d("PIC", "Image URI: $imageUri")
-//            viewModel.postImage(context, imageUri)
 
         }
         Column(
@@ -86,6 +82,7 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
                 .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             if (showPickSelectionButtons.value) {
                 Button(
                     onClick = {
@@ -104,7 +101,6 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
 
                         imageUri = uri
                         cameraLauncher.launch(uri)
-                        //viewModel.postImage(uri)
                     }
                 ) {
                     Text(text = "Take Photo")
@@ -112,8 +108,10 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
             } else {
                 Button(
                     onClick = {
-                        if (imageString.value != null)
+                        if (imageString.value != null) {
+                            onSendImage.invoke()
                             viewModel.postImage(imageString.value)
+                        }
                     }
                 ) {
                     Text(text = "Send image")
@@ -123,4 +121,12 @@ fun ImagePicker(viewModel: MainViewModel = hiltViewModel()) {
 
         }
     }
+}
+
+@Composable
+fun ImageSender(
+) {
+    //viewModel.postImage(imageString.value)
+
+
 }

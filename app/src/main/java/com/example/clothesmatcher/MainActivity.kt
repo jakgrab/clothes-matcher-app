@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.clothesmatcher.navigation.ClothesNavigation
 import com.example.clothesmatcher.screens.main.main.ImagePicker
+import com.example.clothesmatcher.screens.main.main.MainScreen
 import com.example.clothesmatcher.screens.main.main.MainViewModel
 import com.example.clothesmatcher.ui.theme.Camera_test_v2Theme
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,8 +38,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val viewModel = hiltViewModel<MainViewModel>()
-                    ImagePicker(viewModel)
+//                    val viewModel = hiltViewModel<MainViewModel>()
+//                    ImagePicker(viewModel)
+                    ClothesNavigation()
                 }
             }
         }
@@ -50,6 +53,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     Camera_test_v2Theme {
-        ImagePicker()
+
     }
 }

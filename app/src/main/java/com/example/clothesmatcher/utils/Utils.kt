@@ -1,6 +1,8 @@
 package com.example.clothesmatcher.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import java.io.File
@@ -51,4 +53,9 @@ fun createTempFileFromUri(context: Context, uri: Uri, fileName: String): File? {
 fun getTempFileName(): String {
     val dateFormat = SimpleDateFormat("dd-MM-yy-HH-mm", Locale.GERMAN)
     return dateFormat.format(System.currentTimeMillis()) + ".jpg"
+}
+
+fun decodeImageFromBase64(imageString: String?): Bitmap? {
+    val imageBytes = Base64.decode(imageString, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }
