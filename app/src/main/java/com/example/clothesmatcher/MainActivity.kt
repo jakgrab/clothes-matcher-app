@@ -15,7 +15,7 @@ import com.example.clothesmatcher.navigation.ClothesNavigation
 import com.example.clothesmatcher.screens.main.main.ImagePicker
 import com.example.clothesmatcher.screens.main.main.MainScreen
 import com.example.clothesmatcher.screens.main.main.MainViewModel
-import com.example.clothesmatcher.ui.theme.Camera_test_v2Theme
+import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Camera_test_v2Theme {
+            ClothesMatcherTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    Camera_test_v2Theme {
+    ClothesMatcherTheme {
 
     }
 }

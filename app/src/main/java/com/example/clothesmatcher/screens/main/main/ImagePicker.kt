@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 
 import coil.compose.AsyncImage
 import com.example.clothesmatcher.PhotoFileProvider
@@ -21,8 +22,8 @@ import retrofit2.Response
 @Composable
 fun ImagePicker(
     modifier: Modifier,
-    viewModel: MainViewModel = hiltViewModel(),
-    onSendImage: () -> Unit = {}
+    viewModel: MainViewModel,
+    navController: NavController
 ) {
     // TODO change send button to "done"?
     // TODO move viewModel.postImage from ImagePicker to ImagePOster
@@ -73,6 +74,7 @@ fun ImagePicker(
                 contentDescription = "Selected Image"
             )
             showPickSelectionButtons.value = false
+
             imageString.value = viewModel.imageStringFromUri(context, imageUri)
 
         }
@@ -106,16 +108,19 @@ fun ImagePicker(
                     Text(text = "Take Photo")
                 }
             } else {
-                Button(
-                    onClick = {
-                        if (imageString.value != null) {
-                            onSendImage.invoke()
-                            viewModel.postImage(imageString.value)
-                        }
-                    }
-                ) {
-                    Text(text = "Send image")
+                ImageSender(imageString = imageString.value, viewModel = viewModel) {
+                    //navController.navigate()
                 }
+//                Button(
+//                    onClick = {
+//                        if (imageString.value != null) {
+//                            onSendImage.invoke()
+//                            viewModel.postImage(imageString.value)
+//                        }
+//                    }
+//                ) {
+//                    Text(text = "Send image")
+//                }
 
             }
 
@@ -125,8 +130,22 @@ fun ImagePicker(
 
 @Composable
 fun ImageSender(
+    imageString: String?,
+    viewModel: MainViewModel,
+    onSendImage: () -> Unit
 ) {
-    //viewModel.postImage(imageString.value)
+    Button(
+        onClick = {
+            if (imageString != null) {
+                viewModel.postImage(imageString)
+                onSendImage.invoke()
+            }
+        }
+    )
+    {
+        Text(text = "Find Matches")
+    }
+
 
 
 }
