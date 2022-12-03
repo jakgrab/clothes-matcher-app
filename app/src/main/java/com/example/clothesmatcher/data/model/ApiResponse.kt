@@ -1,10 +1,9 @@
 package com.example.clothesmatcher.data.model
 
+
 data class ApiResponse(
-    val is_json: Boolean?,
-    val img_value_type: String?,
-    val img_value: String?
+    val images: ArrayList<ReturnedImage>
 )
-data class ImageResponse(
+data class ReturnedImage(
     val returned_image: String?
 )

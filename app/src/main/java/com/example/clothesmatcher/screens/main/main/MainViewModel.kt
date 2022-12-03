@@ -27,9 +27,17 @@ class MainViewModel @Inject constructor(
     private val repository: ClothesRepository
 ) : ViewModel() {
 
-    //private val responseState = MutableStateFlow<Response<ApiResponse>?>(null)
-    private val _responseImageState = MutableStateFlow<Bitmap?>(null)
+    private val _responseImageState = MutableStateFlow<List<Bitmap?>>(emptyList())
     val responseImageState = _responseImageState.asStateFlow()
+
+    private val _isImageListEmpty = MutableStateFlow(false)
+    val isImageListEmpty = _isImageListEmpty.asStateFlow()
+
+    private val _isConnectionSuccessful = MutableStateFlow<Boolean?>(null)
+    val isConnectionSuccessful = _isConnectionSuccessful.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage = _errorMessage.asStateFlow()
 
     fun postImage(imageString: String?) {
         val jsonObject = JSONObject()
@@ -44,11 +52,24 @@ class MainViewModel @Inject constructor(
 
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
+
+                    _isConnectionSuccessful.value = true
                     Log.d("PIC", "Response: ${response.body()}")
-                    _responseImageState.value =
-                        getImageFromResponse(response.body()?.returned_image)
+
+                    val listOfImages =
+                        response.body()?.images?.map { getImageFromResponse(it.returned_image) }
+
+                    Log.d("pic", "LIst of images: $listOfImages")
+
+                    if (!listOfImages.isNullOrEmpty()) {
+                        _responseImageState.value = listOfImages
+                    } else {
+                        _isImageListEmpty.value = true
+                    }
                 } else {
-                    Log.e("PIC", "Retrofit error: ${response.code()}")
+                    Log.e("PIC", "Retrofit error: ${response.errorBody()}")
+                    _errorMessage.value = response.errorBody().toString()
+                    _isConnectionSuccessful.value = false
                 }
             }
         }

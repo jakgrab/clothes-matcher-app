@@ -95,4 +95,11 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.1"
     implementation "androidx.compose.material3:material3-window-size-class:1.0.1"
 
+    // Animated navigation
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.27.1"
+
+    // status bar customization
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.1"
+
+
 }

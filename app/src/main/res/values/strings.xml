@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ClothesMatcher</string>
+    <string name="app_description_1">Clothes Matcher uses AI to find similar clothes based on photos.</string>
+    <string name="app_description_2">Simply take a photo or upload one from your device.</string>
 </resources>

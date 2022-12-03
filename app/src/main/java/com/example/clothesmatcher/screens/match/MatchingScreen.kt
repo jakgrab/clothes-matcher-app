@@ -1,9 +1,10 @@
 package com.example.clothesmatcher.screens.match
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
+import android.graphics.Bitmap
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -13,67 +14,76 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.clothesmatcher.R
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.clothesmatcher.navigation.ClothesScreens
+import com.example.clothesmatcher.screens.main.main.MainViewModel
+import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 import com.example.clothesmatcher.widgets.ClothesTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-// viewModel: MainViewModel
-fun MatchingScreen() {
+fun MatchingScreen(navController: NavController, viewModel: MainViewModel) {
+    ClothesMatcherTheme {
 
-    val scaffoldState = rememberScaffoldState()
-    val topAppBarState = rememberTopAppBarState()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val imagesFromServer = viewModel.responseImageState.collectAsState()
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        scaffoldState = scaffoldState,
-        topBar = {
-            ClothesTopAppBar(
-                title = "Matches",
-                icon = Icons.Rounded.ArrowBackIos,
-                actionIcon = Icons.Rounded.Settings,
-                onNavigationIconClicked = {
 
-                },
-                onActionIconClicked = {
+        //val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior() now params
+        // Scaffold( modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection) or other
+        // pass scroll behavior to top bar et voilà !
 
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(it)
+        val scaffoldState = rememberScaffoldState()
+        val topAppBarState = rememberTopAppBarState()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-                .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            scaffoldState = scaffoldState,
+            topBar = {
+                ClothesTopAppBar(
+                    title = "Matches",
+                    icon = Icons.Rounded.ArrowBackIos,
+                    actionIcon = Icons.Rounded.Settings,
+                    onNavigationIconClicked = {
+                        navController.popBackStack(
+                            route = ClothesScreens.MainScreen.name,
+                            inclusive = false
+                        )
+                    },
+                    onActionIconClicked = {
+
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            }
         ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = Color(0xFF262331)//0xff313247)
+            Box(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(top = it.calculateTopPadding())
+                    .fillMaxSize(),
+                contentAlignment = Alignment.TopCenter
             ) {
                 Column(
                     modifier = Modifier
                         .padding(15.dp)
                         .fillMaxSize(),
+                    // caused by error about infinity maximum height constrains
+                    //.verticalScroll(scrollState),
                     verticalArrangement = Arrangement.SpaceAround,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -83,22 +93,32 @@ fun MatchingScreen() {
                         fontSize = 22.sp,
                         textAlign = TextAlign.Left
                     )
-                    Surface(
-                        modifier = Modifier
-                            .size(width = 330.dp, height = 370.dp),
-                        shape = RoundedCornerShape(35.dp),
-                        border = BorderStroke(1.dp, Color.Black)
+                    Spacer(modifier = Modifier.height(30.dp))
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(30.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.drainnn),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds
-                        )
+                        items(items = imagesFromServer.value) { image ->
+                            MatchingImage(image)
+                        }
                     }
-                    //Image(bitmap = ImageBitmap.imageResource(id = ), contentDescription = )
                 }
             }
-
         }
+    }
+}
+
+@Composable
+private fun MatchingImage(image: Bitmap?) {
+    Surface(
+        modifier = Modifier
+            .size(width = 330.dp, height = 370.dp),
+        shape = RoundedCornerShape(35.dp),
+        border = BorderStroke(1.dp, Color.Black)
+    ) {
+        AsyncImage(
+            model = image,
+            contentDescription = "Result from model",
+            contentScale = ContentScale.FillBounds
+        )
     }
 }
