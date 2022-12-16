@@ -50,6 +50,12 @@ class MainViewModel @Inject constructor(
 
             val response = repository.uploadFile(requestBody)
 
+            if (response == null) {
+                _isConnectionSuccessful.value = false
+                Log.d("tag", "ViewModel _isConnectionSuccessful: ${_isConnectionSuccessful.value}")
+                return@launch
+            }
+
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 

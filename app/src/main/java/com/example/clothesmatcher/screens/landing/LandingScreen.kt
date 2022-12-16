@@ -108,13 +108,6 @@ fun LandingScreen(navController: NavHostController) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     GradientButton(
-                        text = "loading animation",
-                        gradient = gradient,
-                        modifier = Modifier.size(width = 100.dp, height = 60.dp)
-                    ) {
-                        navController.navigate(ClothesScreens.LoadingScreen.name)
-                    }
-                    GradientButton(
                         text = "Let's Go",
                         gradient = gradient,
                         modifier = Modifier.size(width = 200.dp, height = 60.dp),
