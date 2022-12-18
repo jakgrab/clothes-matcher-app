@@ -21,28 +21,22 @@ fun File.toBase64(): String? {
     return result
 }
 
-//private fun getBase64ForUriAndPossiblyCrash(context: Context, uri: Uri): String {
-//    //val contentResolver = ContentResolver(context)
-//    //context.contentResolver.openInputStream(uri).readBytes()
-//    try {
-//        val bytes = context.contentResolver.openInputStream(uri)?.readBytes()
-//
-//        return Base64.encodeToString(bytes, Base64.DEFAULT)
-//
-//    } catch (error: IOException) {
-//        error.printStackTrace() // This exception always occurs
-//    }
-//}
-// encoding an image
+fun matchIpOrUrl(input: String): Boolean {
+    // Regex for matching IP addresses
+    val ipRegex = """\b^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$\b""".toRegex()
 
-//fun encode(imageUri: Uri): String {
-//    val input =
-//}
+    // Modified regex for matching URLs
+    val urlRegex =
+        """\bhttps?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\b""".toRegex()
+
+    return input.matches(ipRegex) || input.matches(urlRegex)
+}
+
 fun createTempFileFromUri(context: Context, uri: Uri, fileName: String): File? {
     return try {
         val stream = context.contentResolver.openInputStream(uri)
         val file = File.createTempFile(fileName, "", context.cacheDir)
-        org.apache.commons.io.FileUtils.copyInputStreamToFile(stream,file)
+        org.apache.commons.io.FileUtils.copyInputStreamToFile(stream, file)
         file
     } catch (e: Exception) {
         e.printStackTrace()

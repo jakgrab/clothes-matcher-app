@@ -41,7 +41,6 @@ fun MatchingScreen(navController: NavController, viewModel: MainViewModel) {
 
         val imagesFromServer = viewModel.responseImageState.collectAsState()
 
-
         //val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior() now params
         // Scaffold( modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection) or other
         // pass scroll behavior to top bar et voilà !
