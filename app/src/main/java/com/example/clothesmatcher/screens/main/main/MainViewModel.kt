@@ -6,7 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.clothesmatcher.domain.repository.ClothesRepository
+import com.example.clothesmatcher.repository.ClothesRepository
 import com.example.clothesmatcher.utils.createTempFileFromUri
 import com.example.clothesmatcher.utils.decodeImageFromBase64
 import com.example.clothesmatcher.utils.getTempFileName

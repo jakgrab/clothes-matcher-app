@@ -101,5 +101,17 @@ dependencies {
     // status bar customization
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.1"
 
+    //Room
+    def room_version = "2.4.3"
 
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+    
+    // To use Kotlin Symbol Processing (KSP) - ksp is an alternative to kapt,
+    // you have to declare it's use in build.gradle (project) file
+
+    // ksp("androidx.room:room-compiler:$room_version")
 }

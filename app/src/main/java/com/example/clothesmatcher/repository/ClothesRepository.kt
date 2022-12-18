@@ -1,4 +1,4 @@
-package com.example.clothesmatcher.domain.repository
+package com.example.clothesmatcher.repository
 
 import com.example.clothesmatcher.data.model.ApiResponse
 import okhttp3.RequestBody
