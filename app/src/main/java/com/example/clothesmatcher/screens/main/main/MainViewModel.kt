@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.repository.ClothesRepository
 import com.example.clothesmatcher.utils.createTempFileFromUri
 import com.example.clothesmatcher.utils.decodeImageFromBase64
@@ -26,6 +27,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val repository: ClothesRepository
 ) : ViewModel() {
+
+    // TODO get server url from database and pass to uploadFile
 
     private val _responseImageState = MutableStateFlow<List<Bitmap?>>(emptyList())
     val responseImageState = _responseImageState.asStateFlow()
@@ -48,7 +51,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val response = repository.uploadFile(requestBody)
+            val response = repository.uploadFile(BASE_URL,requestBody)
 
             if (response == null) {
                 _isConnectionSuccessful.value = false

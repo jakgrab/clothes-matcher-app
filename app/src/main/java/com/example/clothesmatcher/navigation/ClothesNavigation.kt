@@ -14,6 +14,8 @@ import com.example.clothesmatcher.screens.loading.LoadingScreen
 import com.example.clothesmatcher.screens.main.main.MainScreen
 import com.example.clothesmatcher.screens.main.main.MainViewModel
 import com.example.clothesmatcher.screens.match.MatchingScreen
+import com.example.clothesmatcher.screens.options.OptionsScreen
+import com.example.clothesmatcher.screens.options.OptionsViewModel
 import com.example.clothesmatcher.screens.splash.SplashScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -25,6 +27,7 @@ fun ClothesNavigation() {
 
     val animatedNavController = rememberAnimatedNavController()
     val mainViewModel = hiltViewModel<MainViewModel>()
+    val optionsViewModel = hiltViewModel<OptionsViewModel>()
 
     AnimatedNavHost(
         navController = animatedNavController,
@@ -109,6 +112,10 @@ fun ClothesNavigation() {
                 } else null
             }
         ) { MainScreen(mainViewModel = mainViewModel, navController = animatedNavController) }
+
+        composable(route = ClothesScreens.OptionsScreen.name) {
+            OptionsScreen()//optionsViewModel = optionsViewModel, navController = animatedNavController)
+        }
 
         composable(
             route = ClothesScreens.MatchingScreen.name,

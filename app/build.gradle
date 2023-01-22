@@ -108,8 +108,8 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:$room_version")
-    
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
     // To use Kotlin Symbol Processing (KSP) - ksp is an alternative to kapt,
     // you have to declare it's use in build.gradle (project) file
 

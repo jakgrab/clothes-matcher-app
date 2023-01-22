@@ -1,10 +1,7 @@
 package com.example.clothesmatcher.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,4 +15,14 @@ interface ServerDAO {
 
     @Delete
     suspend fun deleteUrl(url: UrlEntity)
+
+    @Query("SELECT url FROM url_tbl WHERE `default`=1")
+    fun getDefault(): String
+
+    @Update
+    suspend fun updateUrl(url: UrlEntity)
+
+    @Query("UPDATE url_tbl SET `default` = 0")
+    suspend fun setEveryUrlAsNotDefault()
+
 }

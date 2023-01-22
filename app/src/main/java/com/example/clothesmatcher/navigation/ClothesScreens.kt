@@ -5,5 +5,6 @@ enum class ClothesScreens {
     SplashScreen,
     LandingScreen,
     MatchingScreen,
-    LoadingScreen
+    LoadingScreen,
+    OptionsScreen
 }

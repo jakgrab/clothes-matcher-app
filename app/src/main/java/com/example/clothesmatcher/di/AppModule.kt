@@ -5,7 +5,9 @@ import androidx.room.Room
 import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.data.remote.ClothesApi
 import com.example.clothesmatcher.data.repository.ClothesRepositoryImpl
+import com.example.clothesmatcher.data.repository.UrlRepositoryImpl
 import com.example.clothesmatcher.repository.ClothesRepository
+import com.example.clothesmatcher.repository.UrlRepository
 import com.example.clothesmatcher.room.ServerDAO
 import com.example.clothesmatcher.room.ServerDatabase
 import dagger.Module
@@ -19,7 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+class AppModule {
 
     @Provides
     @Singleton
@@ -35,6 +37,12 @@ object AppModule {
     @Singleton
     fun providesFileRepository(api: ClothesApi): ClothesRepository {
         return ClothesRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun providesUrlRepository(serverDao: ServerDAO): UrlRepository {
+        return UrlRepositoryImpl(serverDao)
     }
 
     @Provides

@@ -5,5 +5,5 @@ import okhttp3.RequestBody
 import retrofit2.Response
 
 interface ClothesRepository {
-    suspend fun uploadFile(requestBody: RequestBody): Response<ApiResponse>?
+    suspend fun uploadFile(serverUrl: String, requestBody: RequestBody): Response<ApiResponse>?
 }

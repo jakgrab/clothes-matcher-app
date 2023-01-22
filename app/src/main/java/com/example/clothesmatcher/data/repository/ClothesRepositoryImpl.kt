@@ -11,10 +11,15 @@ import javax.inject.Inject
 class ClothesRepositoryImpl @Inject constructor(
     private val api: ClothesApi
 ) : ClothesRepository {
-    // TODO response class
-    override suspend fun uploadFile(requestBody: RequestBody): Response<ApiResponse>? {
+
+    // TODO changed arguments
+
+    override suspend fun uploadFile(
+        serverUrl: String,
+        requestBody: RequestBody
+    ): Response<ApiResponse>? {
         return try {
-            api.uploadImage(requestBody)
+            api.uploadImage( serverUrl, requestBody)
         } catch (e: SocketTimeoutException) {
             e.printStackTrace()
             null
