@@ -1,8 +1,10 @@
 package com.example.clothesmatcher.screens.options
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -51,6 +53,10 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
         mutableStateOf(false)
     }
 
+    var hideKeyboard by remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         topBar = {
             ClothesTopAppBar(
@@ -65,6 +71,12 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    hideKeyboard = true
+                }
                 .padding(top = it.calculateTopPadding() + 50.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -108,37 +120,48 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        if (!showAddUrlTextField) {
+                        AnimatedVisibility(visible = showAddUrlTextField) {
+                            UrlTextField(
+                                modifier = Modifier.height(60.dp),
+                                onSearch = { newUrl ->
+                                    Log.d("tag", "New url/ip: $newUrl")
+                                    newUrlState.value = newUrl
+                                    changeServerUrl.value = false
+                                    showAddUrlTextField = false
+                                },
+                                hideKeyboard = hideKeyboard,
+                                onFocusClear = {
+                                    hideKeyboard = false
+                                    changeServerUrl.value = false
+                                    showAddUrlTextField = false
+                                }
+                            )
+                        }
+                        AnimatedVisibility(visible = !showAddUrlTextField) {
                             Text(
                                 text = newUrlState.value,
                                 //modifier = Modifier.height(50.dp),
-                                fontSize = 25.sp,
+                                fontSize = 20.sp,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1
                             )
-                        } else {
-                            UrlTextField { newUrl ->
-                                Log.d("tag", "New url/ip: $newUrl")
-                                newUrlState.value = newUrl
-                                changeServerUrl.value = false
-                                showAddUrlTextField = false
-                            }
                         }
                     }
+
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                if (changeServerUrl.value) {
-                    Log.d("URL", "Change server url value: ${changeServerUrl.value}")
-                    ChangeUrlButtons(
-                        modifier = Modifier.fillMaxWidth(),
-                        onSelect = {
-                            showSelectList = true
-                        },
-                        onAdd = {
-                            showAddUrlTextField = true
-                        }
-                    )
-                }
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+
+            AnimatedVisibility(visible = changeServerUrl.value) {
+                ChangeUrlButtons(
+                    modifier = Modifier.fillMaxWidth(),
+                    onSelect = {
+                        showSelectList = true
+                    },
+                    onAdd = {
+                        showAddUrlTextField = true
+                    }
+                )
             }
         }
     }
@@ -158,7 +181,7 @@ fun SelectUrlList(modifier: Modifier = Modifier, urlList: List<UrlEntity>) {
 
 @Preview
 @Composable
-fun Preview() {
+fun OptionsPreview() {
     ClothesMatcherTheme {
         OptionsScreen()
     }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.clothesmatcher.utils.matchIpOrUrl
@@ -12,7 +13,10 @@ import com.example.clothesmatcher.utils.matchIpOrUrl
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UrlTextField(
-    onSearch: (String) -> Unit
+    modifier: Modifier = Modifier,
+    onSearch: (String) -> Unit,
+    hideKeyboard: Boolean,
+    onFocusClear: () -> Unit,
 ) {
     val userProvidedUrlState = remember {
         mutableStateOf("")
@@ -28,6 +32,7 @@ fun UrlTextField(
     val focusManager = LocalFocusManager.current
 
     MyTextField(
+        modifier = modifier,
         valueState = userProvidedUrlState,
         errorState = errorState,
         placeholderText = "New server Url",
@@ -43,4 +48,9 @@ fun UrlTextField(
             errorState.value = false
         }
     )
+
+    if (hideKeyboard) {
+        focusManager.clearFocus()
+        onFocusClear()
+    }
 }

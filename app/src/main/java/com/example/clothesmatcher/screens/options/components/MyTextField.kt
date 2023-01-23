@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(
+    modifier: Modifier = Modifier,
     valueState: MutableState<String>,
     errorState: MutableState<Boolean>,
     placeholderText: String,
@@ -31,7 +32,7 @@ fun MyTextField(
         onValueChange = { url ->
             valueState.value = url
         },
-        modifier = Modifier.height(60.dp),
+        modifier = modifier,
         textStyle = TextStyle(fontSize = 20.sp),
         placeholder = {
             Text(text = placeholderText, fontSize = 20.sp)
@@ -40,6 +41,7 @@ fun MyTextField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         keyboardActions = onAction,
         singleLine = true,
+        maxLines = 1,
         shape = RoundedCornerShape(10.dp)
     )
 }
