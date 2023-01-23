@@ -6,12 +6,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.decode.BitmapFactoryDecoder
 import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.repository.ClothesRepository
-import com.example.clothesmatcher.utils.createTempFileFromUri
-import com.example.clothesmatcher.utils.decodeImageFromBase64
-import com.example.clothesmatcher.utils.getTempFileName
-import com.example.clothesmatcher.utils.toBase64
+import com.example.clothesmatcher.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,10 +83,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun imageStringFromUri(context: Context, uri: Uri?): String? {
+        val fileUtils = FileUtils()
         if (uri == null)
             return null
 
-        val file = createTempFileFromUri(context, uri, getTempFileName())
+        val file = fileUtils.createTempFileFromUri(context, uri, fileUtils.getTempFileName())
 
         Log.d("PIC", "Created file: ${file.toString()}")
 
@@ -99,6 +98,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getImageFromResponse(responseImageString: String?): Bitmap? {
-        return decodeImageFromBase64(responseImageString)
+        val fileUtils = FileUtils()
+        return fileUtils.decodeImageFromBase64(responseImageString)
     }
 }

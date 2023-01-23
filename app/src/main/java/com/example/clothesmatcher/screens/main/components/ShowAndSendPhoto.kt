@@ -25,11 +25,10 @@ import com.example.clothesmatcher.widgets.GradientButton
 fun ShowAndSendPhoto(
     imageUri: MutableState<Uri?>,
     buttonGradient: Brush,
-    imageString: MutableState<String?>,
-    navController: NavController,
-    showPickSelectionButtons: MutableState<Boolean>,
-    mainViewModel: MainViewModel,
-    context: Context
+//    imageString: MutableState<String?>,
+//    navController: NavController,
+//    mainViewModel: MainViewModel,
+    onSendImage: () -> Unit,
 ) {
     Surface(
         modifier = Modifier
@@ -51,13 +50,14 @@ fun ShowAndSendPhoto(
         gradient = buttonGradient,
         modifier = Modifier.size(width = 200.dp, height = 70.dp),
         onClick = {
-            if (imageString.value != null) {
-                mainViewModel.postImage(imageString.value)
-                navController.navigate(ClothesScreens.LoadingScreen.name)
-            }
+            onSendImage()
+//            if (imageString.value != null) {
+//                mainViewModel.postImage(imageString.value)
+//                navController.navigate(ClothesScreens.LoadingScreen.name)
+//            }
         }
     )
-    showPickSelectionButtons.value = false
 
-    imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
+    //showPickSelectionButtons.value = false
+    //imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
 }

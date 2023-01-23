@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.util.Base64
+import kotlinx.coroutines.NonDisposableHandle.parent
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
-import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,24 +33,3 @@ fun matchIpOrUrl(input: String): Boolean {
     return input.matches(ipRegex) || input.matches(urlRegex)
 }
 
-fun createTempFileFromUri(context: Context, uri: Uri, fileName: String): File? {
-    return try {
-        val stream = context.contentResolver.openInputStream(uri)
-        val file = File.createTempFile(fileName, "", context.cacheDir)
-        org.apache.commons.io.FileUtils.copyInputStreamToFile(stream, file)
-        file
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-fun getTempFileName(): String {
-    val dateFormat = SimpleDateFormat("dd-MM-yy-HH-mm", Locale.GERMAN)
-    return dateFormat.format(System.currentTimeMillis()) + ".jpg"
-}
-
-fun decodeImageFromBase64(imageString: String?): Bitmap? {
-    val imageBytes = Base64.decode(imageString, Base64.DEFAULT)
-    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-}

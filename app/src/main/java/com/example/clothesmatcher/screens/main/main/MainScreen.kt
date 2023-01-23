@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.clothesmatcher.navigation.ClothesScreens
 import com.example.clothesmatcher.screens.main.components.ShowAndSendPhoto
 import com.example.clothesmatcher.screens.main.components.TakePictureOrChooseExisting
 import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
@@ -34,7 +35,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
         val scaffoldState = rememberScaffoldState()
 
-        val hasImage = remember {
+        val isImageRetrieved = remember {
             mutableStateOf(false)
         }
 
@@ -46,7 +47,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.GetContent(),
                 onResult = { uri ->
-                    hasImage.value = uri != null
+                    isImageRetrieved.value = uri != null
                     imageUri.value = uri
                 }
             )
@@ -55,7 +56,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.TakePicture(),
                 onResult = { success ->
-                    hasImage.value = success
+                    isImageRetrieved.value = success
                 }
             )
 
@@ -99,16 +100,25 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                if (hasImage.value && imageUri.value != null) {
+                if (isImageRetrieved.value && imageUri.value != null) {
+
+                    showPickSelectionButtons.value = false
+                    imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
+
                     ShowAndSendPhoto(
                         imageUri,
                         buttonGradient,
-                        imageString,
-                        navController,
-                        showPickSelectionButtons,
-                        mainViewModel,
-                        context
+//                        imageString,
+//                        navController,
+//                        mainViewModel,
+                        onSendImage = {
+                            if (imageString.value != null) {
+                                mainViewModel.postImage(imageString.value)
+                                navController.navigate(ClothesScreens.LoadingScreen.name)
+                            }
+                        }
                     )
+
                 }
 
                 if (showPickSelectionButtons.value) {
