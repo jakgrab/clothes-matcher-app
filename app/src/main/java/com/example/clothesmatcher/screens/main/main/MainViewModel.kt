@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val response = repository.uploadFile(BASE_URL,requestBody)
+            val response = repository.uploadFile(BASE_URL, requestBody)
 
             if (response == null) {
                 _isConnectionSuccessful.value = false
@@ -95,6 +95,18 @@ class MainViewModel @Inject constructor(
         file.delete()
 
         return fileToString
+    }
+
+    fun convertUriToBase64(context: Context, uri: Uri?): String? {
+        val fileUtils = FileUtils()
+        if (uri == null)
+            return null
+        val file = fileUtils.createTempFileFromUri(context, uri, fileUtils.getTempFileName())
+        val fileToBitmap = fileUtils.convertFileToBitmapAndResize(file)
+
+        file?.delete()
+
+        return fileUtils.convertBitmapToBase64(fileToBitmap)
     }
 
     private fun getImageFromResponse(responseImageString: String?): Bitmap? {

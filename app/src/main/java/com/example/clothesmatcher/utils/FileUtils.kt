@@ -34,10 +34,10 @@ class FileUtils {
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
-    fun convertFileToBitmapAndResize(imageFile: File): Bitmap? {
+    fun convertFileToBitmapAndResize(imageFile: File?): Bitmap? {
         return try {
             val bmOptions = BitmapFactory.Options()
-            var bitmap = BitmapFactory.decodeFile(imageFile.absolutePath, bmOptions)
+            var bitmap = BitmapFactory.decodeFile(imageFile?.absolutePath, bmOptions)
             bitmap = Bitmap.createScaledBitmap(bitmap!!, 200, 200, true)
             bitmap
         } catch (e: IOException) {
@@ -46,10 +46,15 @@ class FileUtils {
         }
     }
 
-    fun convertBitmapToBase64(bitmap: Bitmap): String? {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    fun convertBitmapToBase64(bitmap: Bitmap?): String? {
+        return try {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

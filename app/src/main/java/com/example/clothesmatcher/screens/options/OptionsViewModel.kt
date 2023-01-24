@@ -6,6 +6,7 @@ import com.example.clothesmatcher.constants.Constants
 import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.repository.UrlRepository
 import com.example.clothesmatcher.room.UrlEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class OptionsViewModel @Inject constructor(private val urlRepository: UrlRepository) : ViewModel() {
 
     private val _urlList = MutableStateFlow<List<UrlEntity>>(emptyList())

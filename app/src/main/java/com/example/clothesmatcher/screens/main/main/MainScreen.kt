@@ -103,7 +103,8 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 if (isImageRetrieved.value && imageUri.value != null) {
 
                     showPickSelectionButtons.value = false
-                    imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
+                    //imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
+                    imageString.value = mainViewModel.convertUriToBase64(context, imageUri.value)
 
                     ShowAndSendPhoto(
                         imageUri,

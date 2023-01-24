@@ -27,7 +27,7 @@ fun ClothesNavigation() {
 
     val animatedNavController = rememberAnimatedNavController()
     val mainViewModel = hiltViewModel<MainViewModel>()
-    val optionsViewModel = hiltViewModel<OptionsViewModel>()
+    //val optionsViewModel = hiltViewModel<OptionsViewModel>()
 
     AnimatedNavHost(
         navController = animatedNavController,
