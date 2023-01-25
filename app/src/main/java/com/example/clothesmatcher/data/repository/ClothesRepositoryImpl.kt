@@ -8,18 +8,17 @@ import retrofit2.Response
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class ClothesRepositoryImpl @Inject constructor(
+class ClothesRepositoryImpl(
     private val api: ClothesApi
 ) : ClothesRepository {
 
     // TODO changed arguments
 
     override suspend fun uploadFile(
-        url: String,
         requestBody: RequestBody
     ): Response<ApiResponse>? {
         return try {
-            api.uploadImage(url, requestBody)
+            api.uploadImage(requestBody)
         } catch (e: SocketTimeoutException) {
             e.printStackTrace()
             null

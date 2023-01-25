@@ -76,9 +76,10 @@ fun UrlScreen(optionsViewModel: OptionsViewModel, navController: NavController) 
                     modifier = Modifier.padding(16.dp),
                     urlList = urlList.value,
                     onMarkAsDefaultClicked = { chosenUrl ->
-                        Log.d("URL", "Set as default: $chosenUrl")
                         optionsViewModel.setToBaseUrl(chosenUrl)
+                        optionsViewModel.getDefaultUrl()
                         navController.navigate(ClothesScreens.OptionsScreen.name)
+                        Log.d("URL", "Set as default: $chosenUrl")
                     },
                     onDeleteCLicked = { urlToDelete ->
                         Log.d("URL", "To delete: $urlToDelete")

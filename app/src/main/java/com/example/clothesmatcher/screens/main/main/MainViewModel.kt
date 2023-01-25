@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.decode.BitmapFactoryDecoder
 import com.example.clothesmatcher.constants.Constants.BASE_URL
+import com.example.clothesmatcher.data.remote.ClothesApi
+import com.example.clothesmatcher.data.remote.RetrofitClient
+import com.example.clothesmatcher.data.repository.ClothesRepositoryImpl
 import com.example.clothesmatcher.repository.ClothesRepository
 import com.example.clothesmatcher.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,10 +24,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: ClothesRepository
-) : ViewModel() {
+//@HiltViewModel
+class MainViewModel() : ViewModel() {
 
     // TODO get server url from database and pass to uploadFile
 
@@ -40,16 +41,19 @@ class MainViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun postImage(imageString: String?) {
+    fun postImage(imageString: String?, defaultUrl: String) {
         val jsonObject = JSONObject()
         jsonObject.put("photo", imageString)
         val jsonObjectToString = jsonObject.toString()
-
         val requestBody = jsonObjectToString.toRequestBody("application/json".toMediaTypeOrNull())
+
+        Log.d("URL", "POST IMAGE TO: $defaultUrl")
+        val client = createRetrofitClient(defaultUrl)
+        val repository = ClothesRepositoryImpl(client)
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val response = repository.uploadFile(BASE_URL, requestBody)
+            val response = repository.uploadFile(requestBody)
 
             if (response == null) {
                 _isConnectionSuccessful.value = false
@@ -80,6 +84,9 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+    private fun createRetrofitClient(baseUrl: String): ClothesApi {
+        return RetrofitClient().createFileApi(baseUrl)
     }
 
     fun imageStringFromUri(context: Context, uri: Uri?): String? {

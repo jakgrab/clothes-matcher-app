@@ -23,21 +23,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-    @Provides
-    @Singleton
-    fun provideFileApi(): ClothesApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ClothesApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun providesFileRepository(api: ClothesApi): ClothesRepository {
-        return ClothesRepositoryImpl(api)
-    }
+//    @Provides
+//    @Singleton
+//    fun provideFileApi(): ClothesApi {
+//        return Retrofit.Builder()
+//            .baseUrl(BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//            .create(ClothesApi::class.java)
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun providesFileRepository(api: ClothesApi): ClothesRepository {
+//        return ClothesRepositoryImpl(api)
+//    }
 
     @Provides
     @Singleton

@@ -2,6 +2,7 @@ package com.example.clothesmatcher.screens.main.main
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -93,7 +94,7 @@ fun MainScreen(
                 actionIcon = Icons.Rounded.Settings,
                 colors = null,
                 onActionIconClicked = {
-
+                    navController.navigate(ClothesScreens.OptionsScreen.name)
                 },
             )
         }
@@ -110,18 +111,18 @@ fun MainScreen(
             if (isImageRetrieved.value && imageUri.value != null) {
 
                 showPickSelectionButtons.value = false
-                //imageString.value = mainViewModel.imageStringFromUri(context, imageUri.value)
                 imageString.value = mainViewModel.convertUriToBase64(context, imageUri.value)
+
+                // get default url before sending
+                optionsViewModel.getDefaultUrl()
 
                 ShowAndSendPhoto(
                     imageUri,
                     buttonGradient,
-//                        imageString,
-//                        navController,
-//                        mainViewModel,
                     onSendImage = {
                         if (imageString.value != null) {
-                            mainViewModel.postImage(imageString.value)
+                            Log.d("URL", "POST TO URL: ${defaultUrl.value}")
+                            mainViewModel.postImage(imageString.value, defaultUrl.value)
                             navController.navigate(ClothesScreens.LoadingScreen.name)
                         }
                     }

@@ -42,7 +42,7 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
         mutableStateOf(false)
     }
 
-    val newUrlState = remember {
+    val newUrlState = remember(defaultUrl.value) {
         mutableStateOf(defaultUrl.value)
     }
 
@@ -110,7 +110,6 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
                             .background(color = MaterialTheme.colorScheme.surface)
                             .clickable {
                                 changeServerUrl.value = true
-                                Log.d("URL", "CLICKED ")
                             },
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
@@ -120,7 +119,7 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
                             UrlTextField(
                                 modifier = Modifier.height(60.dp),
                                 onSearch = { newUrl ->
-                                    Log.d("tag", "New url/ip: $newUrl")
+                                    Log.d("URL", "New url/ip: $newUrl")
                                     newUrlState.value = newUrl
                                     changeServerUrl.value = false
                                     showAddUrlTextField = false

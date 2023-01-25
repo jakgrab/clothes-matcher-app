@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 //import androidx.navigation.compose.composable
 import com.example.clothesmatcher.screens.landing.LandingScreen
@@ -27,7 +28,7 @@ import com.google.accompanist.navigation.animation.composable
 fun ClothesNavigation() {
 
     val animatedNavController = rememberAnimatedNavController()
-    val mainViewModel = hiltViewModel<MainViewModel>()
+    val mainViewModel = viewModel<MainViewModel>()
     val optionsViewModel = hiltViewModel<OptionsViewModel>()
 
     AnimatedNavHost(
@@ -49,7 +50,8 @@ fun ClothesNavigation() {
             route = ClothesScreens.LandingScreen.name,
             enterTransition = {
                 if (initialState.destination.hierarchy.any {
-                        it.route == ClothesScreens.SplashScreen.name }
+                        it.route == ClothesScreens.SplashScreen.name
+                    }
                 ) {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left,
@@ -59,7 +61,8 @@ fun ClothesNavigation() {
             },
             exitTransition = {
                 if (targetState.destination.hierarchy.any {
-                        it.route == ClothesScreens.MainScreen.name }
+                        it.route == ClothesScreens.MainScreen.name
+                    }
                 ) {
                     slideOutOfContainer(
                         AnimatedContentScope.SlideDirection.Left,
@@ -74,7 +77,7 @@ fun ClothesNavigation() {
             route = ClothesScreens.MainScreen.name,
             enterTransition = {
                 if (initialState.destination.hierarchy.any {
-                    it.route == ClothesScreens.LandingScreen.name
+                        it.route == ClothesScreens.LandingScreen.name
                     }) {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left,
@@ -84,7 +87,7 @@ fun ClothesNavigation() {
             },
             exitTransition = {
                 if (targetState.destination.hierarchy.any {
-                    it.route == ClothesScreens.MatchingScreen.name
+                        it.route == ClothesScreens.MatchingScreen.name
                     }) {
                     slideOutOfContainer(
                         AnimatedContentScope.SlideDirection.Left,
@@ -94,7 +97,7 @@ fun ClothesNavigation() {
             },
             popEnterTransition = {
                 if (initialState.destination.hierarchy.any {
-                    it.route == ClothesScreens.MatchingScreen.name
+                        it.route == ClothesScreens.MatchingScreen.name
                     }) {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Right,
@@ -112,10 +115,19 @@ fun ClothesNavigation() {
                     )
                 } else null
             }
-        ) { MainScreen(mainViewModel = mainViewModel, navController = animatedNavController) }
+        ) {
+            MainScreen(
+                mainViewModel = mainViewModel,
+                optionsViewModel = optionsViewModel,
+                navController = animatedNavController
+            )
+        }
 
         composable(route = ClothesScreens.OptionsScreen.name) {
-            OptionsScreen(optionsViewModel = optionsViewModel, navController = animatedNavController)
+            OptionsScreen(
+                optionsViewModel = optionsViewModel,
+                navController = animatedNavController
+            )
         }
 
         composable(route = ClothesScreens.UrlScreen.name) {
@@ -139,7 +151,7 @@ fun ClothesNavigation() {
                         it.route == ClothesScreens.MainScreen.name
                     }) {
                     slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Left, // TODO maybe right?
+                        AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(700)
                     )
                 } else null
