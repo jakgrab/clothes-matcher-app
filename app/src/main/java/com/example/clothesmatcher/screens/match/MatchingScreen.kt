@@ -16,7 +16,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,80 +30,72 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.clothesmatcher.navigation.ClothesScreens
 import com.example.clothesmatcher.screens.main.main.MainViewModel
-import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 import com.example.clothesmatcher.widgets.ClothesTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MatchingScreen(navController: NavController, viewModel: MainViewModel) {
-    ClothesMatcherTheme {
 
-        val imagesFromServer = viewModel.responseImageState.collectAsState()
+    val imagesFromServer = viewModel.responseImageState.collectAsState()
 
-        //val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior() now params
-        // Scaffold( modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection) or other
-        // pass scroll behavior to top bar et voilà !
+    val scaffoldState = rememberScaffoldState()
 
-        val scaffoldState = rememberScaffoldState()
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            scaffoldState = scaffoldState,
-            topBar = {
-                ClothesTopAppBar(
-                    title = "Matches",
-                    icon = Icons.Rounded.ArrowBackIos,
-                    actionIcon = Icons.Rounded.Settings,
-                    onNavigationIconClicked = {
-                        navController.popBackStack(
-                            route = ClothesScreens.MainScreen.name,
-                            inclusive = false
-                        )
-                    },
-                    onActionIconClicked = {
-
-                    },
-                    scrollBehavior = scrollBehavior
-                )
-            }
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(top = it.calculateTopPadding())
-                    .fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .fillMaxSize(),
-                    // caused by error about infinity maximum height constrains
-                    //.verticalScroll(scrollState),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Here's what the AI has found...",
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Left
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        scaffoldState = scaffoldState,
+        topBar = {
+            ClothesTopAppBar(
+                title = "Matches",
+                icon = Icons.Rounded.ArrowBackIos,
+                actionIcon = Icons.Rounded.Settings,
+                onNavigationIconClicked = {
+                    navController.popBackStack(
+                        route = ClothesScreens.MainScreen.name,
+                        inclusive = false
                     )
-                    Spacer(modifier = Modifier.height(30.dp))
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(30.dp)
-                    ) {
-                        items(items = imagesFromServer.value) { image ->
-                            MatchingImage(image)
-                        }
+                },
+                onActionIconClicked = {
+                    navController.navigate(ClothesScreens.OptionsScreen.name)
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(top = it.calculateTopPadding())
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(15.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Here's what the AI has found...",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Left
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(30.dp)
+                ) {
+                    items(items = imagesFromServer.value) { image ->
+                        MatchingImage(image)
                     }
                 }
             }
         }
     }
 }
+
 
 @Composable
 private fun MatchingImage(image: Bitmap?) {

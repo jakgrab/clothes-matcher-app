@@ -12,8 +12,6 @@ class ClothesRepositoryImpl(
     private val api: ClothesApi
 ) : ClothesRepository {
 
-    // TODO changed arguments
-
     override suspend fun uploadFile(
         requestBody: RequestBody
     ): Response<ApiResponse>? {

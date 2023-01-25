@@ -1,17 +1,7 @@
 package com.example.clothesmatcher.utils
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Environment
 import android.util.Base64
-import kotlinx.coroutines.NonDisposableHandle.parent
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 fun File.toBase64(): String? {
     val result: String?

@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 class UrlRepositoryImpl @Inject constructor(private val serverDAO: ServerDAO) : UrlRepository {
 
-    // TODO maybe operate on only one url, add current one as the default
     override fun getAllUrls(): Flow<List<UrlEntity>> = serverDAO.getAllUrls()
 
     override suspend fun addUrl(url: UrlEntity) = serverDAO.addUrl(url)

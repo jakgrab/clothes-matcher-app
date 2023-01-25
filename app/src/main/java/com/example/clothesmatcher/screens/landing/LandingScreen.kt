@@ -26,105 +26,94 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.clothesmatcher.R
 import com.example.clothesmatcher.navigation.ClothesScreens
-import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 import com.example.clothesmatcher.widgets.ClothesTopAppBar
 import com.example.clothesmatcher.widgets.GradientButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreen(navController: NavHostController) {
-    ClothesMatcherTheme {
 
-        val scaffoldState = rememberScaffoldState()
+    val topAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = Color.Black,
+    )
 
-        val topAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Black,
-        )
+    Scaffold(
+        topBar = {
+            ClothesTopAppBar(
+                title = "Clothes Matcher",
+                colors = topAppBarColors,
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = it.calculateTopPadding())
+                .background(Color.Black),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        Scaffold(
-            topBar = {
-                ClothesTopAppBar(
-                    title = "Clothes Matcher",
-                    icon = Icons.Rounded.Menu,
-                    actionIcon = Icons.Rounded.Settings,
-                    colors = topAppBarColors,
-                    onNavigationIconClicked = {
+            Image(
+                painter = painterResource(id = R.drawable.design),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp),
+                contentScale = ContentScale.Fit
+            )
 
-                    },
-                    onActionIconClicked = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                GradientText(text = stringResource(R.string.app_description_1))
+            }
 
-                    }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                GradientText(
+                    text = stringResource(R.string.app_description_2),
+                    textAlign = TextAlign.End
                 )
             }
-        ) {
-            it
-            Column(
+            val gradient = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF6178F0),
+                    MaterialTheme.colorScheme.inversePrimary,
+                    Color(0xFFCB7EF5)
+                )
+            )
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-
-                Image(
-                    painter = painterResource(id = R.drawable.design),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(400.dp),
-                    contentScale = ContentScale.Fit
+                GradientButton(
+                    text = "Let's Go",
+                    gradient = gradient,
+                    modifier = Modifier.size(width = 200.dp, height = 60.dp),
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(width = 24.dp, height = 24.dp)
+                        )
+                    },
+                    spacerWidth = 5.dp,
+                    onClick = {
+                        navController.navigate(ClothesScreens.MainScreen.name)
+                    }
                 )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    GradientText(text = stringResource(R.string.app_description_1))
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    GradientText(
-                        text = stringResource(R.string.app_description_2),
-                        textAlign = TextAlign.End
-                    )
-                }
-                val gradient = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF6178F0),
-                        MaterialTheme.colorScheme.inversePrimary,
-                        Color(0xFFCB7EF5)
-                    )
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(15.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    GradientButton(
-                        text = "Let's Go",
-                        gradient = gradient,
-                        modifier = Modifier.size(width = 200.dp, height = 60.dp),
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowForward,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(width = 24.dp, height = 24.dp)
-                            )
-                        },
-                        spacerWidth = 5.dp,
-                        onClick = {
-                            navController.navigate(ClothesScreens.MainScreen.name)
-                        }
-                    )
-                }
             }
         }
     }

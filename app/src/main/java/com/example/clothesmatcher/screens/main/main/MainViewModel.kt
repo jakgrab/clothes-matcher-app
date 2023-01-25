@@ -6,14 +6,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.decode.BitmapFactoryDecoder
-import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.data.remote.ClothesApi
 import com.example.clothesmatcher.data.remote.RetrofitClient
 import com.example.clothesmatcher.data.repository.ClothesRepositoryImpl
-import com.example.clothesmatcher.repository.ClothesRepository
-import com.example.clothesmatcher.utils.*
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.clothesmatcher.utils.FileUtils
+import com.example.clothesmatcher.utils.toBase64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,12 +19,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import javax.inject.Inject
 
-//@HiltViewModel
-class MainViewModel() : ViewModel() {
-
-    // TODO get server url from database and pass to uploadFile
+class MainViewModel : ViewModel() {
 
     private val _responseImageState = MutableStateFlow<List<Bitmap?>>(emptyList())
     val responseImageState = _responseImageState.asStateFlow()

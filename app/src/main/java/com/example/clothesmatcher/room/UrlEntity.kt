@@ -12,5 +12,4 @@ data class UrlEntity(
     val url: String,
     @ColumnInfo(name = "default")
     var isDefault: Int = 0
-    // maybe add Int parameter "default" which can be set to 1 or 0
 )

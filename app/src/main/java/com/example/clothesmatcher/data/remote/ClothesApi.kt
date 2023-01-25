@@ -10,7 +10,6 @@ import retrofit2.http.Url
 
 interface ClothesApi {
     @Headers("Accept: application/json")
-    //@POST("./")
     @POST("./")
     suspend fun uploadImage(
         @Body requestBody: RequestBody

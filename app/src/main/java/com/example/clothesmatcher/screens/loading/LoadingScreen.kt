@@ -2,7 +2,6 @@ package com.example.clothesmatcher.screens.loading
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -20,14 +18,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.example.clothesmatcher.navigation.ClothesScreens
 import com.example.clothesmatcher.screens.main.main.MainViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoadingScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -35,22 +30,16 @@ fun LoadingScreen(navController: NavHostController, viewModel: MainViewModel) {
     val isConnectionSuccessful = viewModel.isConnectionSuccessful.collectAsState()
 
     val scaffoldState = rememberScaffoldState()
-    val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(scaffoldState = scaffoldState) {
-
-
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
             LaunchedEffect(isConnectionSuccessful.value) {
-                //delay(10000)
-                //navController.navigate(ClothesScreens.MainScreen.name)
-
                 if (isConnectionSuccessful.value == false) {
                     Log.d("tag", "isConnectionSuccesful: ${isConnectionSuccessful.value}")
                     coroutineScope.launch {

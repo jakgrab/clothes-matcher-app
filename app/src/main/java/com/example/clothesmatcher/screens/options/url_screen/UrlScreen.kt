@@ -9,7 +9,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
@@ -21,37 +20,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.clothesmatcher.constants.Constants.BASE_URL
 import com.example.clothesmatcher.navigation.ClothesScreens
 import com.example.clothesmatcher.room.UrlEntity
 import com.example.clothesmatcher.screens.options.OptionsViewModel
-import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 import com.example.clothesmatcher.widgets.ClothesTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UrlScreen(optionsViewModel: OptionsViewModel, navController: NavController) {
 
-//    val mockUrlList = listOf(
-//        UrlEntity("www.facebook.com"),
-//        UrlEntity(BASE_URL),
-//        UrlEntity("https://ngrok-2dscv.com"),
-//        UrlEntity("https://ngrok-2dscv.com"),
-//        UrlEntity("https://ngrok-2dscv.com")
-//    )
-
     val urlList = optionsViewModel.urlList.collectAsState()
 
     val isUrlListNotEmpty by remember(urlList.value.size) {
         mutableStateOf(urlList.value.isNotEmpty())
     }
-//    val isUrlListNotEmpty by remember(mockUrlList.size) {
-//        mutableStateOf(mockList2.isNotEmpty())
-//    }
 
     Scaffold(
         topBar = {
