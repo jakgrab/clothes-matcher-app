@@ -13,7 +13,7 @@ interface UrlRepository{
 
     suspend fun deleteUrl(url: UrlEntity)
 
-    fun getDefault(): String
+    fun getDefault(): String?
 
     suspend fun updateUrl(url: UrlEntity)
 

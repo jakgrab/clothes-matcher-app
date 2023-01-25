@@ -20,12 +20,12 @@ class OptionsViewModel @Inject constructor(private val urlRepository: UrlReposit
     private val _urlList = MutableStateFlow<List<UrlEntity>>(emptyList())
     val urlList = _urlList.asStateFlow()
 
-    private val _defaultUrl = MutableStateFlow<String>(BASE_URL)
+    private val _defaultUrl = MutableStateFlow(BASE_URL)
     val defaultUrl = _defaultUrl.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            _defaultUrl.value = urlRepository.getDefault()
+            _defaultUrl.value = urlRepository.getDefault() ?: BASE_URL
 
             urlRepository.getAllUrls().collect { allUrls ->
                 _urlList.value = allUrls

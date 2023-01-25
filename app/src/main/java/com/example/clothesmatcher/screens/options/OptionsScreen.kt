@@ -19,6 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.clothesmatcher.navigation.ClothesScreens
 import com.example.clothesmatcher.room.UrlEntity
 import com.example.clothesmatcher.screens.options.components.ChangeUrlButtons
 import com.example.clothesmatcher.screens.options.components.UrlTextField
@@ -27,43 +29,37 @@ import com.example.clothesmatcher.widgets.ClothesTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHostController) {
+fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostController) {
 
-    //val urlListState = optionsViewModel.urlList.collectAsState()
+    val defaultUrl = optionsViewModel.defaultUrl.collectAsState()
 
-    /* TODO Upscale all components to fit UrlTextField,
-    *  TODO cancel option for entering new url,
-    *  TODO when select url button clicked - show list from database
+    /* TODO:
+    *    add changing number of image results from API (numResults: Int)
+    *
     *  */
-
 
     val changeServerUrl = remember {
         mutableStateOf(false)
     }
 
     val newUrlState = remember {
-        mutableStateOf("VEEEEEERY LOOOOOOGN OLDURL")
+        mutableStateOf(defaultUrl.value)
     }
 
     var showAddUrlTextField by remember {
         mutableStateOf(false)
     }
 
-    var showSelectList by remember {
-        mutableStateOf(false)
-    }
-
     var hideKeyboard by remember {
         mutableStateOf(false)
     }
-
     Scaffold(
         topBar = {
             ClothesTopAppBar(
                 title = "Settings",
                 icon = Icons.Rounded.ArrowBackIos,
                 onNavigationIconClicked = {
-                    // navController.popBackStack()
+                    navController.popBackStack()
                 }
             )
         }
@@ -128,6 +124,7 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
                                     newUrlState.value = newUrl
                                     changeServerUrl.value = false
                                     showAddUrlTextField = false
+                                    optionsViewModel.addUrl(newUrl)
                                 },
                                 hideKeyboard = hideKeyboard,
                                 onFocusClear = {
@@ -156,7 +153,7 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
                 ChangeUrlButtons(
                     modifier = Modifier.fillMaxWidth(),
                     onSelect = {
-                        showSelectList = true
+                        navController.navigate(ClothesScreens.UrlScreen.name)
                     },
                     onAdd = {
                         showAddUrlTextField = true
@@ -167,22 +164,13 @@ fun OptionsScreen() {//optionsViewModel: OptionsViewModel, navController: NavHos
     }
 }
 
-@Composable
-fun SelectUrlList(modifier: Modifier = Modifier, urlList: List<UrlEntity>) {
-    Column(modifier = modifier) {
-        LazyColumn() {
-            items(items = urlList) { url ->
-
-            }
-        }
-    }
-}
 
 
-@Preview
-@Composable
-fun OptionsPreview() {
-    ClothesMatcherTheme {
-        OptionsScreen()
-    }
-}
+//
+//@Preview
+//@Composable
+//fun OptionsPreview() {
+//    ClothesMatcherTheme {
+//        OptionsScreen()
+//    }
+//}

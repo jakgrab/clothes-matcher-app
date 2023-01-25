@@ -15,11 +15,11 @@ class ClothesRepositoryImpl @Inject constructor(
     // TODO changed arguments
 
     override suspend fun uploadFile(
-        serverUrl: String,
+        url: String,
         requestBody: RequestBody
     ): Response<ApiResponse>? {
         return try {
-            api.uploadImage( serverUrl, requestBody)
+            api.uploadImage(url, requestBody)
         } catch (e: SocketTimeoutException) {
             e.printStackTrace()
             null
