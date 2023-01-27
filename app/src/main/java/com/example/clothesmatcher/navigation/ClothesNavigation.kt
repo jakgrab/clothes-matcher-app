@@ -29,7 +29,7 @@ fun ClothesNavigation() {
 
     AnimatedNavHost(
         navController = animatedNavController,
-        startDestination = ClothesScreens.SplashScreen.name
+        startDestination = ClothesScreens.LandingScreen.name
     ) {
 
         composable(
