@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Camera_test_v2.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#1C1B1E</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/clothes_matcher_svg</item>
+        <item name="postSplashScreenTheme">@style/Theme.Camera_test_v2</item>
+    </style>
+</resources>

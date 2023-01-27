@@ -91,6 +91,9 @@ dependencies {
     // Apache Commons FileUtils for converting uri to file
     implementation "commons-io:commons-io:2.7"
 
+    // Splash Screen API
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+
     // Icons
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 

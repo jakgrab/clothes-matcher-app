@@ -35,7 +35,7 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
     }
 
     var chosenNumber by remember {
-        mutableStateOf(3)
+        mutableStateOf(2)
     }
 
     val changeServerUrl = remember {

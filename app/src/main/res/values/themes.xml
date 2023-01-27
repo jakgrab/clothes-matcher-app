@@ -4,4 +4,8 @@
     <style name="Theme.Camera_test_v2" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
     </style>
+
+    <style name="Theme.SplashScreen" parent="android:Theme.Material.Light.NoActionBar">
+
+    </style>
 </resources>
