@@ -24,7 +24,7 @@ fun UrlTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val validState = remember(userProvidedUrlState.value) {
-        userProvidedUrlState.value.trim().isNotEmpty() && matchIpOrUrl(userProvidedUrlState.value)
+        userProvidedUrlState.value.trim().isNotEmpty() //&& matchIpOrUrl(userProvidedUrlState.value)
     }
     val errorState = remember {
         mutableStateOf(false)

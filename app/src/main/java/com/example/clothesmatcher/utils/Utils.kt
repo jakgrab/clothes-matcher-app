@@ -20,6 +20,11 @@ fun matchIpOrUrl(input: String): Boolean {
     val urlRegex =
         """\bhttps?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\b""".toRegex()
 
-    return input.matches(ipRegex) || input.matches(urlRegex)
+
+
+    // Matches ports too
+    val urlOrIpRegex = """^((https?:\/\/)|(www.))(?:([a-zA-Z]+)|(\d+\.\d+.\d+.\d+))(:\d{4})?${'$'}""".toRegex()
+    //return input.matches(ipRegex) || input.matches(urlRegex)
+    return input.matches(urlOrIpRegex)
 }
 

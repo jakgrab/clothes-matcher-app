@@ -1,6 +1,5 @@
 package com.example.clothesmatcher.screens.options
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.clothesmatcher.navigation.ClothesScreens
+import com.example.clothesmatcher.screens.options.components.ChangeResultImagesNumber
 import com.example.clothesmatcher.screens.options.components.ChangeUrlButtons
 import com.example.clothesmatcher.screens.options.components.UrlTextField
 import com.example.clothesmatcher.widgets.ClothesTopAppBar
@@ -28,10 +28,15 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
 
     val defaultUrl = optionsViewModel.defaultUrl.collectAsState()
 
-    /* TODO:
-    *    add changing number of image results from API (numResults: Int)
-    *
-    *  */
+    val numImagesArray = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    var chosenNumber by remember {
+        mutableStateOf(3)
+    }
 
     val changeServerUrl = remember {
         mutableStateOf(false)
@@ -48,13 +53,14 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
     var hideKeyboard by remember {
         mutableStateOf(false)
     }
+
     Scaffold(
         topBar = {
             ClothesTopAppBar(
                 title = "Settings",
                 icon = Icons.Rounded.ArrowBackIos,
                 onNavigationIconClicked = {
-                    navController.popBackStack()
+                    navController.popBackStack(ClothesScreens.MainScreen.name, false)
                 }
             )
         }
@@ -74,83 +80,53 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
         ) {
 
             Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(
-                        text = "Change server",
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+
+                DisplayUrlOrTextField(
+                    url = newUrlState.value,
+                    showAddUrlTextField = showAddUrlTextField,
+                    hideKeyboard = hideKeyboard,
+                    onUrlClicked = {
+                        changeServerUrl.value = true
+                    },
+                    onSearch = { newUrl ->
+                        newUrlState.value = newUrl
+                        changeServerUrl.value = false
+                        showAddUrlTextField = false
+                        optionsViewModel.addUrl(newUrl)
+                    },
+                    onFocusClear = {
+                        hideKeyboard = false
+                        changeServerUrl.value = false
+                        showAddUrlTextField = false
+                    }
+                )
+
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                AnimatedVisibility(visible = changeServerUrl.value) {
+                    ChangeUrlButtons(
+                        modifier = Modifier.fillMaxWidth(),
+                        onSelect = {
+                            navController.navigate(ClothesScreens.UrlScreen.name)
+                        },
+                        onAdd = {
+                            showAddUrlTextField = true
+                        }
                     )
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.width(70.dp),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Dns,
-                            contentDescription = "server icon",
-                            modifier = Modifier.size(60.dp)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .background(color = MaterialTheme.colorScheme.surface)
-                            .clickable {
-                                changeServerUrl.value = true
-                            },
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
 
-                        AnimatedVisibility(visible = showAddUrlTextField) {
-                            UrlTextField(
-                                modifier = Modifier.height(60.dp),
-                                onSearch = { newUrl ->
-                                    Log.d("URL", "New url/ip: $newUrl")
-                                    newUrlState.value = newUrl
-                                    changeServerUrl.value = false
-                                    showAddUrlTextField = false
-                                    optionsViewModel.addUrl(newUrl)
-                                },
-                                hideKeyboard = hideKeyboard,
-                                onFocusClear = {
-                                    hideKeyboard = false
-                                    changeServerUrl.value = false
-                                    showAddUrlTextField = false
-                                }
-                            )
-                        }
-                        AnimatedVisibility(visible = !showAddUrlTextField) {
-                            Text(
-                                text = newUrlState.value,
-                                //modifier = Modifier.height(50.dp),
-                                fontSize = 20.sp,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
-                        }
-                    }
-
-                }
-            }
-            Spacer(modifier = Modifier.height(30.dp))
-
-            AnimatedVisibility(visible = changeServerUrl.value) {
-                ChangeUrlButtons(
-                    modifier = Modifier.fillMaxWidth(),
-                    onSelect = {
-                        navController.navigate(ClothesScreens.UrlScreen.name)
+                ChangeResultImagesNumber(
+                    numImagesArray = numImagesArray,
+                    chosenNumber = chosenNumber,
+                    expanded = expanded,
+                    onExpanded = {
+                        expanded = !expanded
                     },
-                    onAdd = {
-                        showAddUrlTextField = true
+                    onNumChosen = { num ->
+                        expanded = false
+                        chosenNumber = num
+                        optionsViewModel.numResults = num
                     }
                 )
             }
@@ -158,7 +134,76 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
     }
 }
 
+@Composable
+fun DisplayUrlOrTextField(
+    url: String,
+    showAddUrlTextField: Boolean,
+    hideKeyboard: Boolean,
+    onUrlClicked: () -> Unit,
+    onSearch: (String) -> Unit,
+    onFocusClear: () -> Unit
+) {
 
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            text = "Change server",
+            fontSize = 15.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier.width(70.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Dns,
+                contentDescription = "server icon",
+                modifier = Modifier.size(60.dp)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .width(200.dp)
+                .background(color = MaterialTheme.colorScheme.surface)
+                .clickable {
+                    onUrlClicked()
+                },
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            AnimatedVisibility(visible = showAddUrlTextField) {
+                UrlTextField(
+                    modifier = Modifier.height(60.dp),
+                    onSearch = { newUrl ->
+                        onSearch(newUrl)
+                    },
+                    hideKeyboard = hideKeyboard,
+                    onFocusClear = {
+                        onFocusClear()
+                    }
+                )
+            }
+            AnimatedVisibility(visible = !showAddUrlTextField) {
+                Text(
+                    text = url,//newUrlState.value,
+                    //modifier = Modifier.height(50.dp),
+                    fontSize = 20.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
 
 //
 //@Preview

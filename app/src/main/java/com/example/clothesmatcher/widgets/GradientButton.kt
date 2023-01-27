@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +22,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun GradientButton(
+    modifier: Modifier = Modifier,
     text: String,
     gradient: Brush,
-    modifier: Modifier = Modifier,
+    backgroundColor: ButtonColors = ButtonDefaults
+        .buttonColors(backgroundColor = MaterialTheme.colorScheme.background),
     icon: @Composable () -> Unit = {},
     spacerWidth: Dp = 0.dp,
     onClick: () -> Unit = {}
@@ -30,7 +34,7 @@ fun GradientButton(
     Button(
         onClick = { onClick.invoke() },
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        colors = backgroundColor,
         shape = RoundedCornerShape(30.dp) // TESTING
     ) {
 

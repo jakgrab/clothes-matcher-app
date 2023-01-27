@@ -100,6 +100,7 @@ fun LandingScreen(navController: NavHostController) {
                 GradientButton(
                     text = "Let's Go",
                     gradient = gradient,
+                    backgroundColor = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
                     modifier = Modifier.size(width = 200.dp, height = 60.dp),
                     icon = {
                         Icon(

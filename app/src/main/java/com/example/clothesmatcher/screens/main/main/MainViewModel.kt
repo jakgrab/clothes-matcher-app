@@ -34,13 +34,18 @@ class MainViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
-    fun postImage(imageString: String?, defaultUrl: String) {
+    fun postImage(imageString: String?, defaultUrl: String, numResults: Int) {
         val jsonObject = JSONObject()
+
+        jsonObject.put("numResults", numResults)
         jsonObject.put("photo", imageString)
+
         val jsonObjectToString = jsonObject.toString()
         val requestBody = jsonObjectToString.toRequestBody("application/json".toMediaTypeOrNull())
 
         Log.d("URL", "POST IMAGE TO: $defaultUrl")
+        Log.d("URL", "NUM RESULTS: $numResults")
+
         val client = createRetrofitClient(defaultUrl)
         val repository = ClothesRepositoryImpl(client)
 
@@ -61,7 +66,7 @@ class MainViewModel : ViewModel() {
                     Log.d("PIC", "Response: ${response.body()}")
 
                     val listOfImages =
-                        response.body()?.images?.map { getImageFromResponse(it.returned_image) }
+                        response.body()?.images?.map { getImageFromResponse(it.image) }
 
                     Log.d("pic", "LIst of images: $listOfImages")
 

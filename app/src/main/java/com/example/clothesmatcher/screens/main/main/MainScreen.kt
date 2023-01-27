@@ -90,7 +90,7 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = {
             ClothesTopAppBar(
-                title = "Main Screen",
+                title = "Selection",
                 actionIcon = Icons.Rounded.Settings,
                 colors = null,
                 onActionIconClicked = {
@@ -122,9 +122,17 @@ fun MainScreen(
                     onSendImage = {
                         if (imageString.value != null) {
                             Log.d("URL", "POST TO URL: ${defaultUrl.value}")
-                            mainViewModel.postImage(imageString.value, defaultUrl.value)
+                            mainViewModel.postImage(
+                                imageString.value,
+                                defaultUrl.value,
+                                optionsViewModel.numResults
+                            )
                             navController.navigate(ClothesScreens.LoadingScreen.name)
                         }
+                    },
+                    onCancel = {
+                        showPickSelectionButtons.value = true
+                        isImageRetrieved.value = false // ?????
                     }
                 )
             }
