@@ -3,13 +3,10 @@ package com.example.clothesmatcher.navigation
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
-//import androidx.navigation.compose.composable
 import com.example.clothesmatcher.screens.landing.LandingScreen
 import com.example.clothesmatcher.screens.loading.LoadingScreen
 import com.example.clothesmatcher.screens.main.main.MainScreen
@@ -18,10 +15,9 @@ import com.example.clothesmatcher.screens.match.MatchingScreen
 import com.example.clothesmatcher.screens.options.OptionsScreen
 import com.example.clothesmatcher.screens.options.OptionsViewModel
 import com.example.clothesmatcher.screens.options.url_screen.UrlScreen
-import com.example.clothesmatcher.screens.splash.SplashScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -35,17 +31,7 @@ fun ClothesNavigation() {
         navController = animatedNavController,
         startDestination = ClothesScreens.SplashScreen.name
     ) {
-        composable(
-            route = ClothesScreens.SplashScreen.name,
-            enterTransition = {
-                fadeIn(animationSpec = tween(200))
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(200))
-            }
-        ) {
-            SplashScreen(navController = animatedNavController)
-        }
+
         composable(
             route = ClothesScreens.LandingScreen.name,
             enterTransition = {
