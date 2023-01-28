@@ -50,7 +50,7 @@ fun TakePictureOrChooseExisting(
     GradientButton(
         text = "Select From Gallery",
         gradient = buttonGradient,
-        modifier = Modifier.size(width = 250.dp, height = 70.dp),
+        modifier = Modifier.size(width = 300.dp, height = 70.dp),
         onClick = {
             imagePicker.launch("image/*")
         }
@@ -61,7 +61,7 @@ fun TakePictureOrChooseExisting(
     GradientButton(
         text = "Take A Photo",
         gradient = buttonGradient,
-        modifier = Modifier.size(width = 200.dp, height = 70.dp),
+        modifier = Modifier.size(width = 300.dp, height = 70.dp),
         onClick = {
             val uri = PhotoFileProvider.getImageUri(context)
             imageUri.value = uri

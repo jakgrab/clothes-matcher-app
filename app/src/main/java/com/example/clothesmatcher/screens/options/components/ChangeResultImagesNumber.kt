@@ -14,14 +14,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowDropUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.clothesmatcher.ui.theme.ClothesMatcherTheme
 
 @Composable
 fun ChangeResultImagesNumber(
@@ -38,7 +36,7 @@ fun ChangeResultImagesNumber(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Change Number of Results",
+            text = "Number of Results",
             fontSize = 20.sp,
             color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
         )

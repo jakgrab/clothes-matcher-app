@@ -36,7 +36,7 @@ fun ShowAndSendPhoto(
 
     Surface(
         modifier = Modifier
-            .size(width = 330.dp, height = 440.dp)
+            .size(width = 270.dp, height = 360.dp)
             .background(MaterialTheme.colorScheme.background)
             .clip(shape = RoundedCornerShape(35.dp)),
     ) {
@@ -47,7 +47,7 @@ fun ShowAndSendPhoto(
         )
     }
 
-    Spacer(modifier = Modifier.height(100.dp))
+    Spacer(modifier = Modifier.height(60.dp))
 
     GradientButton(
         text = "Find Matches",

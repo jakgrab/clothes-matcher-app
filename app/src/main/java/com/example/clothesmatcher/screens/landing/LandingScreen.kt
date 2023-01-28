@@ -55,11 +55,10 @@ fun LandingScreen(navController: NavHostController) {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.design),
+                painter = painterResource(id = R.drawable.landing_screen_logo),
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp),
+                    .size(300.dp),
                 contentScale = ContentScale.Fit
             )
 
@@ -101,7 +100,7 @@ fun LandingScreen(navController: NavHostController) {
                     text = "Let's Go",
                     gradient = gradient,
                     backgroundColor = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
-                    modifier = Modifier.size(width = 200.dp, height = 60.dp),
+                    modifier = Modifier.size(width = 250.dp, height = 80.dp),
                     icon = {
                         Icon(
                             imageVector = Icons.Rounded.ArrowForward,

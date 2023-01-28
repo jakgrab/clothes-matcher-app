@@ -79,7 +79,7 @@ fun OptionsScreen(optionsViewModel: OptionsViewModel, navController: NavHostCont
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Column(modifier = Modifier.fillMaxWidth(0.8f)) {
+            Column(modifier = Modifier.fillMaxWidth(0.9f)) {
 
                 DisplayUrlOrTextField(
                     url = newUrlState.value,

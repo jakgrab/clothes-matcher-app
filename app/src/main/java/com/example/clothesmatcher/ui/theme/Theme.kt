@@ -52,11 +52,12 @@ fun ClothesMatcherTheme(
             color = Color(0xFF1C1B1E),
             darkIcons = false
         )
+        systemUiController.setNavigationBarColor(
+            color = Color(0xFF1C1B1E),
+            darkIcons = false)
     }
     MaterialTheme(
         colorScheme = DarkColors,
         content = content
     )
-
-
 }

@@ -35,15 +35,10 @@ fun ClothesNavigation() {
         composable(
             route = ClothesScreens.LandingScreen.name,
             enterTransition = {
-                if (initialState.destination.hierarchy.any {
-                        it.route == ClothesScreens.SplashScreen.name
-                    }
-                ) {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(700)
                     )
-                } else null
             },
             exitTransition = {
                 if (targetState.destination.hierarchy.any {
